@@ -1,0 +1,10 @@
+   table {
+    background: maroon; /* ÷вет фона таблицы */
+    color: white; /* ÷вет текста */
+   }
+   td {
+    background: navy; /* ÷вет фона €чеек */
+   }
+   td.rrr {
+    background: green; /* ÷вет фона €чеек */
+   }
