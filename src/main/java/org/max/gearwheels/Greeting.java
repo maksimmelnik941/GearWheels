@@ -21,10 +21,18 @@ public class Greeting {
 	}
 
 	public long getId() {
-		return id+24;
+		return id;
 	}
 
 	public String getContent() {
 		return content;
+	}
+
+	@Override
+	public String toString() {
+		return "Greeting{" +
+				"id=" + id +
+				", content='" + content + '\'' +
+				'}';
 	}
 }

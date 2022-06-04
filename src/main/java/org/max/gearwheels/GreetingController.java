@@ -2,10 +2,7 @@ package org.max.gearwheels;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GreetingController {
@@ -17,9 +14,17 @@ public class GreetingController {
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping("/greeting")
 	public Greeting greeting(@RequestParam(required = false, defaultValue = "World") String name) {
-		System.out.println("==== get greeting ====");
+		System.out.println("==== get greeting ==== " + name);
 //		return new Greeting(counter.incrementAndGet(), String.format(template, name, name));
-		return new Greeting(100);
+		return new Greeting(100, name);
+	}
+
+	@GetMapping("/greeting/{id}")
+	public Greeting greetingId(@RequestParam(required = false, defaultValue = "World") String name, @PathVariable("id") Long id ) {
+		System.out.println("==== get greeting ==== oid" + id);
+		Greeting greeting = new Greeting(id);
+		System.out.println(greeting);
+		return greeting;
 	}
 
 	@GetMapping("/greeting-javaconfig")
