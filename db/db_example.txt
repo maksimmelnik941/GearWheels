@@ -1,0 +1,84 @@
+
+=============================================================
+https://computingforgeeks.com/install-postgresql-database-fedora-linux/
+
+dnf module reset postgresql -y
+dnf module enable postgresql:14
+dnf install vim postgresql-server postgresql
+
+postgresql-setup --initdb
+    * Initializing database in '/var/lib/pgsql/data'
+    * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log
+
+systemctl enable --now postgresql
+systemctl status postgresql
+
+vim /var/lib/pgsql/data/postgresql.conf
+    listen_addresses = '*'
+
+vim /var/lib/pgsql/data/pg_hba.conf
+    host    all             all             localhost               trust
+systemctl restart postgresql
+
+=============================================================
+https://www.pgadmin.org/download/pgadmin-4-rpm/
+rpm -i https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/pgadmin4-fedora-repo-2-1.noarch.rpm
+yum install pgadmin4-desktop
+
+
+
+
+
+=============================================================
+https://www.postgresql.org/docs/current/sql-createtable.html
+https://www.postgresql.org/docs/current/datatype-numeric.html
+
+
+1) steel_grade Марка стали - string
+2) limiting_diameter Предельный диаметр заготовки - int
+3) heat_treatment Вид термообработки - int  (в html выбор из 5-и string: нормализация, улучшение, закалка ТВЧ, цементацтя + закалка ТВЧ, азотирование)
+4) hardness Твердость по НВ - int
+5) Твердость по HRC - int
+6) tensile_strength Предел прочности - float
+7) yield_strength Предел текучести - float
+8) endurance_limit Предел выносливости - float
+
+
+CREATE TABLE steel_grade (
+    id serial PRIMARY KEY,
+    name varchar(40)
+);
+INSERT INTO public.steel_grade(name)
+VALUES ('35'), ('40'), ('45'), ('40Х'), ('40ХН'), ('35ХМ'), ('35Л'), ('40Л'), ('45Л'), ('40Г');
+
+
+CREATE TABLE heat_treatment (
+    id serial PRIMARY KEY,
+    name varchar(40)
+);
+INSERT INTO public.heat_treatment(name)
+VALUES ('Н'), ('У'), ('У+ТВЧ');
+
+
+
+CREATE TABLE public.mechanical_characteristics (
+    id serial PRIMARY KEY,
+    steel_grade_id integer,
+    limiting_diameter integer,
+    heat_treatment_id integer,
+    hardness_hrc_min integer,
+    hardness_hrc_max integer,
+    hardness_hb_min integer,
+    hardness_hb_max integer,
+    tensile_strength integer,
+    yield_strength integer,
+    endurance_limit integer,
+    CONSTRAINT fk_steel_grade FOREIGN KEY(steel_grade_id) REFERENCES steel_grade(id),
+    CONSTRAINT fk_heat_treatment_id FOREIGN KEY(heat_treatment_id) REFERENCES heat_treatment(id)
+);
+INSERT INTO public.mechanical_characteristics(steel_grade_id, limiting_diameter, heat_treatment_id, hardness_hrc_min, hardness_hrc_max, hardness_hb_min, hardness_hb_max, tensile_strength, yield_strength, endurance_limit)
+VALUES                                       (1,              0,                 1,                 NULL,             NULL,             163,             192,             550,              270,            235 );
+
+SELECT s.name, limiting_diameter, h.name, m.hardness_hrc_min, m.hardness_hrc_max, m.hardness_hb_min, m.hardness_hb_max, m.tensile_strength, m.yield_strength, m.endurance_limit FROM public.mechanical_characteristics m
+JOIN steel_grade    s ON s.id=m.steel_grade_id
+JOIN heat_treatment h ON h.id=m.heat_treatment_id;
