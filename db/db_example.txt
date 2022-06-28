@@ -1,6 +1,10 @@
+https://en.wikipedia.org/wiki/PostgreSQL
+https://citizix.com/how-to-install-and-configure-postgres-14-on-centos-8/
+dnf install postgresql14
 
 =============================================================
 https://computingforgeeks.com/install-postgresql-database-fedora-linux/
+
 
 dnf module reset postgresql -y
 dnf module enable postgresql:14
@@ -49,7 +53,7 @@ https://www.postgresql.org/docs/current/datatype-numeric.html
 8) endurance_limit Предел выносливости - float
 
 
-CREATE TABLE steel_grade (
+CREATE TABLE public.steel_grade (
     id serial PRIMARY KEY,
     name varchar(40)
 );
@@ -57,7 +61,7 @@ INSERT INTO public.steel_grade(name)
 VALUES ('35'), ('40'), ('45'), ('40Х'), ('40ХН'), ('35ХМ'), ('35Л'), ('40Л'), ('45Л'), ('40Г');
 
 
-CREATE TABLE heat_treatment (
+CREATE TABLE public.heat_treatment (
     id serial PRIMARY KEY,
     name varchar(40)
 );
